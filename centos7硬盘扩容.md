@@ -1,0 +1,1 @@
+https://support.nagios.com/kb/article/resizing-the-vm-disk-size-for-centos-7-814.html
