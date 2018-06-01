@@ -3,8 +3,8 @@
 
 # TCPDUMP命令行输出
 <img src="images/image_tcpdump.png" 
- width = "600" height = "300" alt="协议分析" align=center />
- 1~3为tcp连接建立， 4~7位连接断开，这是最完美的一种结束方式了。
+ width = "600" height = "300" alt="协议分析" align=center />  
+ 1~3为tcp连接建立， 4~7位连接断开。
 
  |标志|3字符缩写|描述|
  |:-:|:-:|:-:|
