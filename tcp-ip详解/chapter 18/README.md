@@ -15,7 +15,7 @@
  |.||以上4个标志均置零
 
 # TCP建立连接协议
-* 请求段（客户端）发送一个SYN端指明客户打算连接的服务器端口，以及出事序号（ISN：1415531521）。
+* 请求段（客户端）发送一个SYN端指明客户打算连接的服务器端口，以及初始序号（ISN：1415531521）。
 * 服务器发回包含服务器的初始序号（ISN:18230521)作为应答，同时将确认序号设置为客户端的ISN加1以对客户端的SYN报文段进行确认。
 * 客户必须将确认序号设置为服务器的ISN加1以对服务器的SYN报文段进行确认。    
 <img src="images/image_connection_established.png" 
@@ -39,7 +39,7 @@ A发出连接请求，在某些网络节点上长时间滞留，以致延误到�
 6. B收到A发出的确认，进入`CLOSED`状态。同样此时B撤销传输控制块TCP，结束本次连接。
 <img src="images/image_connection_closed.png" 
  width = "600" height = "400" alt="协议分析" align=center />   
- 对于现在的网络MSL=2分钟可能太长了一些。因此TCP允许不同的实现可根据具体情况使用更小的MSL值。
+ 对于现在的网络MSL=2分钟可能太长了一些。因此TCP允许不同的实现可根据具体情况使用更小的MSL值。实现的常用值是30秒，1分钟，2分钟。
  B结束连接的时间要比A早一些。
 
 # 为什么A在TIME_WAIT状态等待2MSL的时间呢？
@@ -60,3 +60,8 @@ A发出连接请求，在某些网络节点上长时间滞留，以致延误到�
 * *细线箭头*表示异常变迁  
 <img src="images/image_tcp_state.png" 
  width = "500" height = "600" alt="协议分析" align=center />   
+
+说明    
+   客户端主动打开，发送第一个SYN的进入SYN_SENT状态，而服务器被动打开，接收到SYN，进入到SYN_RCVD状态。  
+   然后服务端发送SYN+ACK给客户端，客户端进入ESTABLISHED，客户端回复ACK，服务端接收进入ESTABLISHED状态。
+   
