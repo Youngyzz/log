@@ -1,0 +1,27 @@
+set nocompatible
+set hlsearch
+set ts=4
+set sw=4
+set nu
+set incsearch "在输入字符串中的过程中就显示匹配点
+set nowrapscan
+set backspace=indent,eol,start "插入模式下哪里允许<BS>删除光标前面的字符
+set autoindent "vim在启动一个新行时候使用与前一行一样的缩进
+set history=50
+set ruler "右下角显示当前光标位置
+set showcmd "总在vim窗口的右下角显示当前光标位置
+set showmode "显示当前处于何种模式
+
+filetype plugin indent on
+autocmd FileType text setlocal textwidth=78
+autocmd BufReadPost *
+\ if line("'\"") > 1 && line("'\"") <= line("$") |
+\       exec "normal! g'\"" |
+\ endif
+set whichwrap=b,s,<,>,[,] "光标处于行首，用<BS>或<Left>键可以回到前一行的结尾; 处于行尾用<Space>键可以移动到下一行的行首;
+set list "显示Tab键
+set listchars=tab:>-,trail:-
+set iskeyword+=- "＠表示所有字母，48-57是0-9， 199-255是拉丁字符。
+if &t_Co > 1
+        syntax enable
+endif
