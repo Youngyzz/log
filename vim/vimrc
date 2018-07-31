@@ -11,6 +11,8 @@ set history=50
 set ruler "右下角显示当前光标位置
 set showcmd "总在vim窗口的右下角显示当前光标位置
 set showmode "显示当前处于何种模式
+set path+=** "搜索包含子目录
+set wildmenu "使用tab键展示匹配的文件
 
 filetype plugin indent on
 autocmd FileType text setlocal textwidth=78
@@ -25,3 +27,96 @@ set iskeyword+=- "＠表示所有字母，48-57是0-9， 199-255是拉丁字符�
 if &t_Co > 1
         syntax enable
 endif
+" 打开vim时自动打开NERDTree
+autocmd vimenter * NERDTree
+" 将NERDTree开关设置为CTRL+n
+map <C-n> :NERDTreeToggle<CR>
+" 修改树的显示图标
+let g:NERDTreeDirArrowExpandable = '+'
+let g:NERDTreeDirArrowCollapsible = '-'
+" 当NERDTree为剩下的唯一窗口时自动关闭
+autocmd bufenter * if (winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree()) | q | endif
+let NERDTreeIgnore=['\.pyc$', '\.pyo$', '\.py\$class$', '\.obj$',
+        \ '\.o$', '\.so$', '\.egg$', '^\.git$', '__pycache__', '\.DS_store']
+
+let g:indentLine_enable= 1
+let g:indentLine_char = '┆'
+let g:indentLine_color_term = 239
+let g:indentLine_concealcursor = 'inc'
+let g:indentLine_conceallevel = 2
+set list lcs=tab:\|\
+let g:indentLine_color_tty_light = 7 "(default: 4)
+let g:indentLine_color_dark = 1 "(default: 2)
+let g:indentLine_showFirstIndentLevel = 0
+let g:indentLine_leadingSpaceEnabled=1
+let g:indentLine_leadingSpaceChar = '.'
+let g:vim_json_syntax_conceal = 0
+
+" ./.tags;
+" 代表在文件的所在目录下（不是:pwd返回的Vim当前目录)查找名字为.tags的符号文件，后面一个分号代表查找不到向上递归到父目录，直到找到.tags文件或者递归到了根目录还没找到，这样对于复杂工程很友好，源代码都是分布在不同子目录中，而只需要在项目顶层目录放一个.tags文件即可;逗号分隔的后半部分.tags是指同时在VIM的当前目录(:pwd返回的目录，可以用:cd改变)下面查找.tags文件。
+set tags=./.tags;,.tags
+
+" gutentags 搜索工程目录的标志，碰到这些文件/目录名就停止，向上一级目录递归
+let g:gutentags_project_root = ['.root', '.svn', '.git', '.hg', '.project']
+
+" 所生成的数据文件的名称
+let g:gutentags_ctags_tagfile = '.tags'
+
+" 将自动生成的tags文件全部放入~/.cache/tags目录中，避免工程污染
+let s:vim_tags = expand('~/.cache/tags')
+let g:gutentags_cached_dir = s:vim_tags
+
+" 配置ctags的参数
+let g:gutentags_ctags_extra_args = ['--filed=+niazS', '--extra=+q']
+let g:gutentags_ctags_extra_args += ['--c++-kinds=+px']
+let g:gutentags_ctags_extra_args += ['--c-kinds=+px']
+
+" ALE配置
+let g:ale_linters_explicit = 1
+let g:ale_completion_delay = 500
+let g:ale_echo_delay = 20
+let g:ale_lint_delay = 500
+let g:ale_echo_msg_format = '[%linter%] %code: %%s'
+let g:ale_lint_on_text_changed = 'normal'
+let g:ale_lint_on_insert_leave = 1
+let g:airline#extensions#ale#enabled = 1
+
+let g:ale_c_gcc_options = '-Wall -O2 -std=c99'
+let g:ale_cpp_gcc_options = '-Wall -O2 -std=c++14'
+let g:ale_c_cppcheck_options=''
+let g:ale_cpp_cppcheck_options=''
+
+let g:ycm_add_preview_to_completeopt = 0
+let g:ycm_show_diagnostics_ui = 0
+let g:ycm_server_log_level = 'info'
+let g:ycm_min_num_identifier_candidate_chars=2
+let g:ycm_collect_identifier_from_comments_and_strings = 1
+let g:ycm_complete_in_strings = 1
+let g:ycm_key_invoke_completion = '<c-z>'
+set completeopt=menu,menuone
+
+noremap <c-z> <NOP>
+let g:ycm_semantic_triggers = {
+                        \ 'c,cpp,python,java,go,erlang,perl':['re!\w{2}'],
+                        \ 'cs,lua,javascript': ['re!\w{2}'],
+                        \ }
+
+" Plugins will be download under the specified directory
+call plug#begin('~/.vim/plugged')
+
+" Declare the list of plugins
+Plug 'tpope/vim-sensible'
+Plug 'junegunn/seoul256.vim'
+Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
+Plug 'ludovicchabant/vim-gutentags'
+Plug 'gregsexton/gitv', {'on': ['Gitv']}
+Plug 'Yggdroot/indentLine'
+Plug 'junegunn/vim-emoji'
+Plug 'fholgado/minibufexpl.vim'
+Plug 'majutsushi/tagbar'
+Plug 'ludovicchabant/vim-gutentags'
+Plug 'w0rp/ale'
+Plug 'mhinz/vim-signify'
+Plug 'Valloric/YouCompleteMe'
+" List ends here. Plugins become visible to Vim after this call.
+call plug#end()
