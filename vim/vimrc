@@ -56,7 +56,7 @@ let g:vim_json_syntax_conceal = 0
 " 代表在文件的所在目录下（不是:pwd返回的Vim当前目录)查找名字为.tags的符号文件，后面一个分号代表查找不到向上递归到父目录，直到找到.tags文件或者递归到了根目录还没找到，这样对于复杂工程很友好，源代码都是分布在不同子目录中，而只需要在项目顶层目录放一个.tags文件即可;逗号分隔的后半部分.tags是指同时在VIM的当前目录(:pwd返回的目录，可以用:cd改变)下面查找.tags文件。
 set tags=./.tags;,.tags
 
-" gutentags 搜索工程目录的标志，碰到这些文件/目录名就停止，向上一级目录递归
+" gutentags 搜索工程目录的标志，碰到这些文件/目录名就停止，就停止向上一级目录递归
 let g:gutentags_project_root = ['.root', '.svn', '.git', '.hg', '.project']
 
 " 所生成的数据文件的名称
@@ -67,9 +67,10 @@ let s:vim_tags = expand('~/.cache/tags')
 let g:gutentags_cached_dir = s:vim_tags
 
 " 配置ctags的参数
-let g:gutentags_ctags_extra_args = ['--filed=+niazS', '--extra=+q']
+let g:gutentags_ctags_extra_args = ['--fields=+niazS', '--extra=+q']
 let g:gutentags_ctags_extra_args += ['--c++-kinds=+px']
 let g:gutentags_ctags_extra_args += ['--c-kinds=+px']
+let g:gutentags_trace = 1
 
 " ALE配置
 let g:ale_linters_explicit = 1
@@ -93,6 +94,7 @@ let g:ycm_min_num_identifier_candidate_chars=2
 let g:ycm_collect_identifier_from_comments_and_strings = 1
 let g:ycm_complete_in_strings = 1
 let g:ycm_key_invoke_completion = '<c-z>'
+let g:ycm_global_ycm_extra_conf = '~/.vim/plugged/YouCompleteMe/third_party/ycmd/.ycm_extra_conf.py'
 set completeopt=menu,menuone
 
 noremap <c-z> <NOP>
