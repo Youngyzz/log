@@ -2,6 +2,7 @@ set nocompatible
 set hlsearch
 set ts=4
 set sw=4
+set t_Co=256 
 set nu
 set incsearch "在输入字符串中的过程中就显示匹配点
 set nowrapscan
@@ -13,38 +14,40 @@ set showcmd "总在vim窗口的右下角显示当前光标位置
 set showmode "显示当前处于何种模式
 set path+=** "搜索包含子目录
 set wildmenu "使用tab键展示匹配的文件
+let mapleader = ','
 
 filetype plugin indent on
 autocmd FileType text setlocal textwidth=78
-autocmd BufReadPost *
+autocmd BufReadPost * 
 \ if line("'\"") > 1 && line("'\"") <= line("$") |
-\       exec "normal! g'\"" |
+\ 	exec "normal! g'\"" |
 \ endif
-set whichwrap=b,s,<,>,[,] "光标处于行首，用<BS>或<Left>键可以回到前一行的结尾; 处于行尾用<Space>键可以移动到下一行的行首;
+set whichwrap=b,s,<,>,[,] "光标处于行首，用<BS>或<Left>键可以回到前一行的结尾; 处于行尾用<Space>键可以移动到下一行的行首; 
 set list "显示Tab键
-set listchars=tab:>-,trail:-
+set listchars=tab:>-,trail:- 
 set iskeyword+=- "＠表示所有字母，48-57是0-9， 199-255是拉丁字符。
 if &t_Co > 1
-        syntax enable
+	syntax enable
 endif
+noremap <leader>sv :source $MYVIMRC<CR>
 " 打开vim时自动打开NERDTree
 autocmd vimenter * NERDTree
 " 将NERDTree开关设置为CTRL+n
-map <C-n> :NERDTreeToggle<CR>
+map <F3> :NERDTreeToggle<CR>
 " 修改树的显示图标
 let g:NERDTreeDirArrowExpandable = '+'
 let g:NERDTreeDirArrowCollapsible = '-'
 " 当NERDTree为剩下的唯一窗口时自动关闭
 autocmd bufenter * if (winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree()) | q | endif
-let NERDTreeIgnore=['\.pyc$', '\.pyo$', '\.py\$class$', '\.obj$',
-        \ '\.o$', '\.so$', '\.egg$', '^\.git$', '__pycache__', '\.DS_store']
+let NERDTreeIgnore=['\.pyc$', '\.pyo$', '\.py\$class$', '\.obj$', 
+	\ '\.o$', '\.so$', '\.egg$', '^\.git$', '__pycache__', '\.DS_store']
 
 let g:indentLine_enable= 1
 let g:indentLine_char = '┆'
 let g:indentLine_color_term = 239
 let g:indentLine_concealcursor = 'inc'
 let g:indentLine_conceallevel = 2
-set list lcs=tab:\|\
+set list lcs=tab:\|\ 
 let g:indentLine_color_tty_light = 7 "(default: 4)
 let g:indentLine_color_dark = 1 "(default: 2)
 let g:indentLine_showFirstIndentLevel = 0
@@ -86,7 +89,7 @@ let g:ale_c_gcc_options = '-Wall -O2 -std=c99'
 let g:ale_cpp_gcc_options = '-Wall -O2 -std=c++14'
 let g:ale_c_cppcheck_options=''
 let g:ale_cpp_cppcheck_options=''
-
+" YouCompleteMe配置
 let g:ycm_add_preview_to_completeopt = 0
 let g:ycm_show_diagnostics_ui = 0
 let g:ycm_server_log_level = 'info'
@@ -96,12 +99,34 @@ let g:ycm_complete_in_strings = 1
 let g:ycm_key_invoke_completion = '<c-z>'
 let g:ycm_global_ycm_extra_conf = '~/.vim/plugged/YouCompleteMe/third_party/ycmd/.ycm_extra_conf.py'
 set completeopt=menu,menuone
+nnoremap <Leader>gt :YcmCompleter GoTo<CR>
+nnoremap <Leader>gd :YcmCompleter GoToDefinition<CR>
+nnoremap <Leader>gr :YcmCompleter GoToReferences<CR>
+nnoremap <Leader>ge :YcmCompleter GoToDeclaration<CR>
+" airline
+let g:airline_enabled = 1
+let g:airline_powerline_fonts = 1
+
+"窗口跳转
+map <C-J> <C-W>j
+map <C-K> <C-W>k
+map <C-H> <C-W>h
+map <C-L> <C-W>l
+
+" easymotion
+map <Leader><Leader>h <Plug>(easymotion-linebackward)
+map <Leader><Leader>j <Plug>(easymotion-j>
+map <Leader><Leader>k <Plug>(easymotion-k>
+map <Leader><Leader>l <Plug>(easymotion-lineforward)
+
+" tagbar
+noremap <F8> :TagbarToggle<CR>
 
 noremap <c-z> <NOP>
 let g:ycm_semantic_triggers = {
-                        \ 'c,cpp,python,java,go,erlang,perl':['re!\w{2}'],
-                        \ 'cs,lua,javascript': ['re!\w{2}'],
-                        \ }
+			\ 'c,cpp,python,java,go,erlang,perl':['re!\w{2}'],
+			\ 'cs,lua,javascript': ['re!\w{2}'],
+			\ }
 
 " Plugins will be download under the specified directory
 call plug#begin('~/.vim/plugged')
@@ -120,5 +145,20 @@ Plug 'ludovicchabant/vim-gutentags'
 Plug 'w0rp/ale'
 Plug 'mhinz/vim-signify'
 Plug 'Valloric/YouCompleteMe'
+Plug 'Lokaltog/vim-easymotion'
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
+Plug 'altercation/vim-colors-solarized'
+Plug 'python-mode/python-mode', {'branch': 'develop' }
 " List ends here. Plugins become visible to Vim after this call.
 call plug#end()
+
+" solarized
+let g:solarized_termcolors = 256
+let g:solarized_termtrans = 1
+let g:solarized_visibility = "normal"
+
+syntax on
+set bg=dark 
+colorscheme solarized
+let g:pymode_python='python'
